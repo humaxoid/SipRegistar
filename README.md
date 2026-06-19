@@ -1,8 +1,8 @@
-# pfSense-pkg-SipRegistrar
+# pfSense-pkg-SipRegistar
 
-Universal SIP registrar based on Kamailio 6.1.1 for pfSense 2.7.2
+Universal SIP registar based on Kamailio 6.1.1 for pfSense 2.7.2
 
-Turns pfSense into a lightweight, vendor-independent SIP registrar
+Turns pfSense into a lightweight, vendor-independent SIP registar
 suitable for small offices, workshops, warehouses, and home deployments.
 Any RFC 3261-compatible SIP IP phones, softphones, and gateways can
 register with it and place calls using short extensions (2–5 digits),
@@ -48,7 +48,7 @@ with optional routing to external SIP gateways based on number prefixes.
                         ├── Additional SIP gateways (optional)
                         │   Routing by number prefix
                         │
-                        └── pfSense (Kamailio SIP registrar)
+                        └── pfSense (Kamailio SIP registar)
                             LAN IP = SIP realm (detected automatically)
                             SIP port: configurable (default 5060/UDP)
 
@@ -98,14 +98,14 @@ forwards the INVITE to the current registration associated with that SIP ID.
 ## Quick Start
 
 1. **Install the package** via *System → Package Manager → Available
-   Packages → Search "SipRegistrar"* and click *Install*.
+   Packages → Search "SipRegistar"* and click *Install*.
 
 2. **Open the firewall port**:
    *Firewall → Rules → LAN → Add* → UDP, destination port 5060
    (or your chosen port), source `LAN net`.
 
-3. **Configure the registrar**:
-   *Services → SIP Registrar*.
+3. **Configure the registar**:
+   *Services → SIP Registar*.
    - **Settings tab**: verify SIP Port and SIP Realm (the LAN IP
      is filled in automatically). Select the language (English / Russian).
    - **Gateways tab**: add on-premises FXS/FXO gateways (e.g. Yeastar TA810)
@@ -126,7 +126,7 @@ forwards the INVITE to the current registration associated with that SIP ID.
    - Username: SIP ID from the Devices table
    - Password: SIP Password from the Devices table
 
-5. **Verify** in *Services → SIP Registrar → Status* —
+5. **Verify** in *Services → SIP Registar → Status* —
    registered phones should appear within 30–60 seconds.
 
 Detailed instructions are available in `INSTALL.ru.md`.
@@ -157,4 +157,4 @@ BSD 2-Clause License — see `LICENSE`.
 
 ## Repository
 
-https://github.com/humaxoid/SipRegistrar
+https://github.com/humaxoid/SipRegistar
