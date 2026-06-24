@@ -1,8 +1,8 @@
-# pfSense-pkg-SipRegistar
+# pfSense-pkg-SipRegistrar
 
-Universal SIP registar based on Kamailio 6.1.1 for pfSense 2.7.2
+Universal SIP registrar based on Kamailio 6.1.1 for pfSense 2.7.2.
 
-Turns pfSense into a lightweight, vendor-independent SIP registar
+Turns pfSense into a lightweight, vendor-independent SIP registrar
 suitable for small offices, workshops, warehouses, and home deployments.
 Any RFC 3261-compatible SIP IP phones, softphones, and gateways can
 register with it and place calls using short extensions (2–5 digits),
@@ -48,7 +48,7 @@ with optional routing to external SIP gateways based on number prefixes.
                         ├── Additional SIP gateways (optional)
                         │   Routing by number prefix
                         │
-                        └── pfSense (Kamailio SIP registar)
+                        └── pfSense (Kamailio SIP registrar)
                             LAN IP = SIP realm (detected automatically)
                             SIP port: configurable (default 5060/UDP)
 
@@ -97,19 +97,22 @@ forwards the INVITE to the current registration associated with that SIP ID.
 
 ## Quick Start
 
-1. **Install the package** via *System → Package Manager → Available
-   Packages → Search "SipRegistar"* and click *Install*.
+1. Download the package and copy it to your pfSense in the /tmp directory
+   Connect via SSH to your pfSense and run the installation script with 
+   the sh command in the /tmp/offline directory install.sh
 
 2. **Open the firewall port**:
    *Firewall → Rules → LAN → Add* → UDP, destination port 5060
    (or your chosen port), source `LAN net`.
 
-3. **Configure the registar**:
-   *Services → SIP Registar*.
+3. **Configure the registrar**:
+   *Services → SIP Registrar*.
    - **Settings tab**: verify SIP Port and SIP Realm (the LAN IP
      is filled in automatically). Select the language (English / Russian).
    - **Gateways tab**: add on-premises FXS/FXO gateways (e.g. Yeastar TA810)
-     with optional number prefixes.
+     with optional number prefixes. Analog gateways whose FXS lines register
+     directly to Kamailio are also auto-detected and shown read-only (model and
+     live status read from their registrations — no SNMP).
    - **Trunks tab**: add external SIP provider lines (e.g. Rostelecom, Zadarma).
      Kamailio registers as a UAC client. Status badges show registration state.
    - **Devices tab**: add phones and softphones.
@@ -118,7 +121,15 @@ forwards the INVITE to the current registration associated with that SIP ID.
      with business hours / after hours schedule.
    - **Outbound tab**: configure which extensions can make outbound calls
      via each trunk or gateway.
-   - Click **Save** — Kamailio reloads without interrupting active calls.
+   - **Groups tab**: ring/hunt groups — parallel ring-all or sequential hunt
+     with per-member timeout and a fallback extension.
+   - **Status / History tabs**: live registrations and active calls; call
+     history (CDR) with a number filter and click-sortable columns.
+   - Click **Save** — settings/device changes apply without dropping
+     registrations. Routing changes (Trunks/Incoming/Outbound/Gateways) restart
+     Kamailio (route blocks are parsed only at startup), but registrations are
+     persisted (db_text usrloc) and reloaded, so phones are **not** dropped and
+     do not re-register.
 
 4. **Configure each phone**:
    - SIP Server: pfSense LAN IP
@@ -126,22 +137,13 @@ forwards the INVITE to the current registration associated with that SIP ID.
    - Username: SIP ID from the Devices table
    - Password: SIP Password from the Devices table
 
-5. **Verify** in *Services → SIP Registar → Status* —
+5. **Verify** in *Services → SIP Registrar → Status* —
    registered phones should appear within 30–60 seconds.
 
 Detailed instructions are available in `INSTALL.ru.md`.
 
 ---
 
-## Limitations
-
-- **LAN only**: the package is designed for SIP traffic within a single
-  local network. RTP is transmitted peer-to-peer between phones without
-  a media proxy. With NAT or VPN, audio may work only one-way.
-- **No TLS / SRTP**: signaling and media are not encrypted.
-  Do not expose the SIP port to the Internet.
-- **No gateway monitoring**: the Kamailio `dispatcher` module is not loaded.
-  All configured gateways are assumed to be available.
 
 See `SECURITY.ru.md` for the full security model.
 
