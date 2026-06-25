@@ -1,0 +1,4 @@
+# Shell scripts and the checksum manifest must use LF — they run on FreeBSD
+# (pfSense). CRLF breaks `read` parsing (filename gets a trailing \r) and sh.
+*.sh        text eol=lf
+SHA256SUMS  text eol=lf

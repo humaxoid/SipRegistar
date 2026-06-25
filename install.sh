@@ -36,7 +36,12 @@ echo "    Найдено пакетов: ${_n}"
 if [ -f "${PKGDIR}/SHA256SUMS" ]; then
     echo "==> Проверка целостности (sha256)..."
     _bad=0
+    _cr=$(printf '\r')
     while read -r _want _file; do
+        # Терпим CRLF в SHA256SUMS (если файл отредактирован на Windows):
+        # без этого имя приходит с хвостовым \r и файл «не находится».
+        _want=${_want%${_cr}}
+        _file=${_file%${_cr}}
         [ -n "${_want}" ] || continue
         if [ ! -f "${PKGDIR}/${_file}" ]; then
             echo "    ОШИБКА: нет файла ${_file}" >&2; _bad=1; continue
