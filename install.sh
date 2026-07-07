@@ -1,6 +1,6 @@
 #!/bin/sh
 # =============================================================================
-# pfSense-pkg-SipRegistrar — ОФЛАЙН-УСТАНОВЩИК (без доступа в интернет)
+# pfSense-pkg-SipRegistar — ОФЛАЙН-УСТАНОВЩИК (без доступа в интернет)
 # =============================================================================
 # Все пакеты (kamailio, rtpproxy и все их зависимости + сам SIP Registrar)
 # лежат в ./packages/. Установка идёт ТОЛЬКО из этого локального репозитория —
@@ -10,7 +10,7 @@
 #     sh /path/to/offline/install.sh
 #
 # Идемпотентно: повторный запуск не ломает уже установленное.
-# Удаление:  pkg delete pfSense-pkg-SipRegistrar   (см. также ../uninstall.sh)
+# Удаление:  pkg delete pfSense-pkg-SipRegistar   (см. также ../uninstall.sh)
 # =============================================================================
 set -e
 
@@ -97,10 +97,10 @@ EOF
 #    -o REPOS_DIR=... ограничивает pkg нашим каталогом (сеть не используется).
 #    Зависимости — это МИНИМАЛЬНЫЙ kamailio (без icu/libxml2/mysql), rtpproxy и
 #    gsm; они НЕ требуют обновления базовых библиотек pfSense (проверено dry-run).
-echo "==> Устанавливаю pfSense-pkg-SipRegistrar + зависимости (без сети)..."
+echo "==> Устанавливаю pfSense-pkg-SipRegistar + зависимости (без сети)..."
 env ABI="${ABI}" IGNORE_OSVERSION=yes ASSUME_ALWAYS_YES=yes \
     pkg -o REPOS_DIR="${REPOS_DIR}" -o IGNORE_OSVERSION=yes \
-    install pfSense-pkg-SipRegistrar
+    install pfSense-pkg-SipRegistar
 
 # 5. Чистим временный конфиг репозитория.
 rm -rf "${REPOS_DIR}" 2>/dev/null || true
@@ -111,5 +111,5 @@ echo "    System > Package Manager > Installed Packages  (pkg_mgr_installed.php)
 echo "    System > Services > SIP Registrar"
 echo ""
 echo "    Статус сервиса:  /usr/local/bin/sip_registrar_ctl.sh status"
-echo "    Удаление:        pkg delete pfSense-pkg-SipRegistrar"
+echo "    Удаление:        pkg delete pfSense-pkg-SipRegistar"
 exit 0

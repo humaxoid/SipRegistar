@@ -1,4 +1,4 @@
-# Инструкция по установке — pfSense-pkg-SipRegistrar v2.4.0
+# Инструкция по установке — pfSense-pkg-SipRegistar v2.5.0
 
 Руководство по установке SIP Registar (**Kamailio 6.1.1** + **rtpproxy**) на
 pfSense 2.7.2 **офлайн-способом** — без доступа в интернет на самом pfSense и **без
@@ -23,7 +23,7 @@ pfSense 2.7.2 **офлайн-способом** — без доступа в и�
 offline/
 ├── install.sh          # установщик
 └── packages/
-    ├── pfSense-pkg-SipRegistrar-2.4.0.pkg   # сам пакет
+    ├── pfSense-pkg-SipRegistar-2.5.0.pkg   # сам пакет
     ├── kamailio-6.1.1.pkg                   # минимальная сборка (без icu/libxml2)
     ├── rtpproxy-2.1.1_1.pkg                 # медиа‑прокси (RTP)
     └── gsm-1.0.23.pkg                       # кодек (зависимость rtpproxy)
@@ -37,7 +37,7 @@ offline/
 
 С Windows (PowerShell, через SCP):
 ```powershell
-scp -r "C:\path\to\pfSense-pkg-SipRegistrar\offline" admin@LAN_IP:/root/offline
+scp -r "C:\path\to\pfSense-pkg-SipRegistar\offline" admin@LAN_IP:/root/offline
 ```
 Или загрузите папку `offline` целиком в `/root/` через WinSCP/FileZilla.
 
@@ -63,7 +63,7 @@ sh install.sh
 
 Признак успеха:
 ```
-[4/4] Installing pfSense-pkg-SipRegistrar-2.4.0...
+[4/4] Installing pfSense-pkg-SipRegistar-2.5.0...
 apply ok
   SIP Registrar installed successfully.
 ==> Готово.
@@ -82,14 +82,14 @@ apply ok
 
 **Проверка по SSH:**
 ```sh
-pkg info pfSense-pkg-SipRegistrar | head -3      # пакет установлен
-pkg query '%R' pfSense-pkg-SipRegistrar          # должно быть: pfSense (кавычки '%R' — для tcsh)
+pkg info pfSense-pkg-SipRegistar | head -3      # пакет установлен
+pkg query '%R' pfSense-pkg-SipRegistar          # должно быть: pfSense (кавычки '%R' — для tcsh)
 ps ax | grep -E '[k]amailio|[r]tpproxy'          # сервисы запущены
 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -c; echo "exit=$?"  # exit=0
 ```
 
 **В веб‑интерфейсе** (обновите страницу — **Ctrl+F5**, при необходимости перезайдите):
-- **System → Package Manager → Installed Packages** — появляется `SIP Registrar 2.4.0`.
+- **System → Package Manager → Installed Packages** — появляется `SIP Registrar 2.5.0`.
 - **Services → SIP Registrar** — страница настройки.
 - **Дашборд‑виджет:** на главной (Dashboard) нажмите **«+»** (Available Widgets) и
   добавьте **SIP Registrar**. *(Виджеты в pfSense добавляются вручную.)*
@@ -104,10 +104,10 @@ ps ax | grep -E '[k]amailio|[r]tpproxy'          # сервисы запущен
 - **ASLR НЕ отключается** — защита системы сохраняется. Минимальная сборка kamailio
   (без KEMI) работает с ASLR включённым; если прежняя версия глобально отключала
   ASLR (`kern.elf64.aslr.*` в sysctl/Tunables), установщик это очищает.
-- **Логи.** Kamailio пишет в **`/var/log/SipRegistrar.log`** (напрямую, минуя
+- **Логи.** Kamailio пишет в **`/var/log/SipRegistar.log`** (напрямую, минуя
   pfSense‑syslog — там `local0.none` отбрасывает логи). Ротация — `newsyslog`
   (ежедневно / 5 МБ / хранить 14 / gzip), правило в
-  `/var/etc/newsyslog.conf.d/SipRegistrar.log.conf`. Подробность логов — *Services →
+  `/var/etc/newsyslog.conf.d/SipRegistar.log.conf`. Подробность логов — *Services →
   SIP Registrar → Settings → Log Level* (0–3; для продакшена 1, для диагностики 3).
   Лог rtpproxy/старта — `/var/log/kamailio_start.log`.
 
@@ -320,15 +320,15 @@ sh install.sh
 ## 8. Удаление
 
 Через GUI: *System → Package Manager → Installed Packages → Remove* рядом с
-`pfSense-pkg-SipRegistrar`.
+`pfSense-pkg-SipRegistar`.
 
 Через SSH:
 ```sh
 # Только пакет (зависимости останутся)
-pkg delete -y pfSense-pkg-SipRegistrar
+pkg delete -y pfSense-pkg-SipRegistar
 
 # Полностью, вместе с kamailio/rtpproxy/gsm
-pkg delete -y pfSense-pkg-SipRegistrar kamailio rtpproxy gsm
+pkg delete -y pfSense-pkg-SipRegistar kamailio rtpproxy gsm
 pkg autoremove -y
 ```
 
@@ -351,7 +351,7 @@ top -b 10 | grep -i kamailio   # нагрузка процессов kamailio (�
 ```
 
 ### Логи
-- Файл: **`/var/log/SipRegistrar.log`** (ротация newsyslog — см. §1a).
+- Файл: **`/var/log/SipRegistar.log`** (ротация newsyslog — см. §1a).
 - Уровень: *Services → SIP Registrar → Settings → Log Level* (1 — продакшен, 3 — диагностика).
 
 ### Отладка SIP-трафика (tcpdump)

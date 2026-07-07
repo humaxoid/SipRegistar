@@ -1,4 +1,4 @@
-# pfSense-pkg-SipRegistrar
+# pfSense-pkg-SipRegistar
 
 Universal SIP registrar based on Kamailio 6.1.1 for pfSense 2.7.2
 
@@ -98,7 +98,7 @@ forwards the INVITE to the current registration associated with that SIP ID.
 ## Quick Start
 
 1. **Install the package** via *System → Package Manager → Available
-   Packages → Search "SipRegistrar"* and click *Install*.
+   Packages → Search "SipRegistar"* and click *Install*.
 
 2. **Open the firewall port**:
    *Firewall → Rules → LAN → Add* → UDP, destination port 5060
@@ -157,4 +157,4 @@ BSD 2-Clause License — see `LICENSE`.
 
 ## Repository
 
-https://github.com/humaxoid/SipRegistrar
+https://github.com/humaxoid/SipRegistar

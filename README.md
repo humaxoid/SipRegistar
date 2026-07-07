@@ -1,4 +1,4 @@
-# pfSense-pkg-SipRegistrar
+# pfSense-pkg-SipRegistar
 
 Universal SIP registrar based on Kamailio 6.1.1 for pfSense 2.7.2.
 
@@ -7,6 +7,23 @@ suitable for small offices, workshops, warehouses, and home deployments.
 Any RFC 3261-compatible SIP IP phones, softphones, and gateways can
 register with it and place calls using short extensions (2–5 digits),
 with optional routing to external SIP gateways based on number prefixes.
+
+---
+
+## Features
+
+- **SIP registrar** for any RFC 3261 phone, softphone, or gateway; short
+  extensions (2–5 digits) and free-form SIP IDs.
+- **Outbound routing** to external SIP gateways by number prefix.
+- **SIP trunks** — register to a provider to receive and place external calls;
+  incoming filtering, work-hours / DID routing, ring groups, call pickup.
+- **Call History (CDR)** and a pfSense **dashboard widget**.
+- **Brute-force / flood protection** and RFC 4028 session timers.
+- **External call transfer (B2BUA)** — *optional, off by default:* lets a
+  dispatcher blind-transfer an external trunk caller to another extension and
+  drop off, even when the provider does not support `REFER`. Transfers appear in
+  the call History and dashboard. Requires `python311` (bundled here); enable it
+  on the Trunks tab.
 
 ---
 
@@ -62,19 +79,18 @@ with optional routing to external SIP gateways based on number prefixes.
 |------------------|--------------------------------------|
 | pfSense          | 2.7.2-RELEASE (amd64)                |
 | FreeBSD          | 14.0-RELEASE (base system)           |
-| Kamailio         | 6.1.1 (FreeBSD quarterly repository) |
-| PHP              | 8.2.x                                |
+| Kamailio         | 6.1.1 (minimal build, in this bundle) |
+| PHP              | 8.2.x (pfSense base)                  |
+| python311        | 3.11.6 (for optional B2BUA; in bundle)|
 
-> **Important**: Kamailio is not available in the pfSense repository.
-> The installer downloads it from the standard FreeBSD quarterly repository
-> using a workaround mechanism (`pfSense-Extra.conf`).
-> This process updates pfSense system packages
-> (php82, perl5, kea, rrdtool, libxml2, and others). For risk details,
-> see `SECURITY.ru.md`; installation instructions are available in
-> `INSTALL.ru.md`.
+> **Offline install — no base changes.** Everything ships in `packages/` and is
+> installed **from the local catalog only** — the installer does **not** reach the
+> Internet and does **not** upgrade or remove any pfSense base package. The bundled
+> `kamailio` is a minimal build linked against base FreeBSD libraries only (no
+> `icu`/`libxml2`/`mysql`). See `INSTALL.md` for the step-by-step guide.
 
-> **ASLR must be disabled** on the pfSense host before running Kamailio 6.x.
-> The installer (`install.sh`) does this automatically.
+> **ASLR is left enabled.** The minimal Kamailio build has no KEMI and runs fine
+> with ASLR on; `install.sh` also clears any legacy global ASLR-disable.
 
 ---
 

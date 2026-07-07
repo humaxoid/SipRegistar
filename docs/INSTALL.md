@@ -1,4 +1,4 @@
-# Installation Guide — pfSense-pkg-SipRegistrar v2.4.0
+# Installation Guide — pfSense-pkg-SipRegistar v2.5.0
 
 This guide covers the **offline installation** of the SIP registrar
 (**Kamailio 6.1.1** + **rtpproxy**) on pfSense 2.7.2 — no Internet access required
@@ -23,7 +23,7 @@ dependencies:
 offline/
 ├── install.sh          # installer
 └── packages/
-    ├── pfSense-pkg-SipRegistrar-2.4.0.pkg   # the package
+    ├── pfSense-pkg-SipRegistar-2.5.0.pkg   # the package
     ├── kamailio-6.1.1.pkg                   # minimal build (no icu/libxml2)
     ├── rtpproxy-2.1.1_1.pkg                 # media proxy (RTP)
     └── gsm-1.0.23.pkg                       # codec (rtpproxy dependency)
@@ -37,7 +37,7 @@ offline/
 
 From Windows (PowerShell, via SCP):
 ```powershell
-scp -r "C:\path\to\pfSense-pkg-SipRegistrar\offline" admin@LAN_IP:/root/offline
+scp -r "C:\path\to\pfSense-pkg-SipRegistar\offline" admin@LAN_IP:/root/offline
 ```
 Or upload the whole `offline` folder into `/root/` with WinSCP/FileZilla.
 
@@ -64,7 +64,7 @@ The script automatically:
 
 Success looks like:
 ```
-[4/4] Installing pfSense-pkg-SipRegistrar-2.4.0...
+[4/4] Installing pfSense-pkg-SipRegistar-2.5.0...
 apply ok
   SIP Registrar installed successfully.
 ```
@@ -82,14 +82,14 @@ permissions, enables autostart, initialises the `<sipregistrar>` section in
 
 **Verify over SSH:**
 ```sh
-pkg info pfSense-pkg-SipRegistrar | head -3      # package installed
-pkg query '%R' pfSense-pkg-SipRegistrar          # must print: pfSense (quote '%R' for tcsh)
+pkg info pfSense-pkg-SipRegistar | head -3      # package installed
+pkg query '%R' pfSense-pkg-SipRegistar          # must print: pfSense (quote '%R' for tcsh)
 ps ax | grep -E '[k]amailio|[r]tpproxy'          # services running
 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -c; echo "exit=$?"  # exit=0
 ```
 
 **In the web UI** (refresh — **Ctrl+F5**, re-login if needed):
-- **System → Package Manager → Installed Packages** — shows `SIP Registrar 2.4.0`.
+- **System → Package Manager → Installed Packages** — shows `SIP Registrar 2.5.0`.
 - **Services → SIP Registrar** — the configuration page.
 - **Dashboard widget:** on the Dashboard click **"+"** (Available Widgets) and add
   **SIP Registrar**. *(Widgets are added manually in pfSense.)*
@@ -104,10 +104,10 @@ ps ax | grep -E '[k]amailio|[r]tpproxy'          # services running
 - **ASLR is NOT disabled** — system protection stays intact. The minimal kamailio
   build (no KEMI) runs with ASLR enabled; if an older version disabled it globally
   (`kern.elf64.aslr.*`), the installer cleans that up.
-- **Logs.** Kamailio writes to **`/var/log/SipRegistrar.log`** (directly, bypassing
+- **Logs.** Kamailio writes to **`/var/log/SipRegistar.log`** (directly, bypassing
   pfSense syslog — its default `local0.none` drops the logs). Rotation is handled by
   `newsyslog` (daily / 5 MB / keep 14 / gzip), rule in
-  `/var/etc/newsyslog.conf.d/SipRegistrar.log.conf`. Verbosity: *Services → SIP
+  `/var/etc/newsyslog.conf.d/SipRegistar.log.conf`. Verbosity: *Services → SIP
   Registrar → Settings → Log Level* (0–3; use 1 in production, 3 for debugging).
 
 ---
@@ -308,15 +308,15 @@ The `<sipregistrar>` settings in `config.xml` are **preserved**.
 ## 8. Uninstalling
 
 Via the GUI: *System → Package Manager → Installed Packages → Remove* next to
-`pfSense-pkg-SipRegistrar`.
+`pfSense-pkg-SipRegistar`.
 
 Via SSH:
 ```sh
 # Package only (dependencies stay)
-pkg delete -y pfSense-pkg-SipRegistrar
+pkg delete -y pfSense-pkg-SipRegistar
 
 # Fully, together with kamailio/rtpproxy/gsm
-pkg delete -y pfSense-pkg-SipRegistrar kamailio rtpproxy gsm
+pkg delete -y pfSense-pkg-SipRegistar kamailio rtpproxy gsm
 pkg autoremove -y
 ```
 
@@ -339,7 +339,7 @@ top -b 10 | grep -i kamailio   # kamailio process load (or interactive: top)
 ```
 
 ### Logs
-- File: **`/var/log/SipRegistrar.log`** (newsyslog rotation — see §1a).
+- File: **`/var/log/SipRegistar.log`** (newsyslog rotation — see §1a).
 - Level: *Services → SIP Registrar → Settings → Log Level* (1 = production, 3 = debug).
 
 ### Capturing SIP traffic (tcpdump)

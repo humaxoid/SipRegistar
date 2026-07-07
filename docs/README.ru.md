@@ -1,4 +1,4 @@
-# pfSense-pkg-SipRegistrar
+# pfSense-pkg-SipRegistar
 
 Универсальный SIP-регистратор на базе Kamailio 6.1.1 для pfSense 2.7.2.
 
@@ -97,7 +97,7 @@
 ## Быстрый старт
 
 1. **Установите пакет** через *System → Package Manager → Available
-   Packages → Search "SipRegistrar"* и нажмите *Install*.
+   Packages → Search "SipRegistar"* и нажмите *Install*.
 
 2. **Откройте порт в брандмауэре**:
    *Firewall → Rules → LAN → Add* → UDP, destination port 5060
@@ -157,4 +157,4 @@ BSD 2-Clause License — см. `LICENSE`.
 
 ## Репозиторий
 
-https://github.com/humaxoid/SipRegistrar
+https://github.com/humaxoid/SipRegistar

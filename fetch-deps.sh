@@ -2,13 +2,20 @@
 # =============================================================================
 # fetch-deps.sh — наполнить ./packages/ для офлайн-бандла SIP Registrar.
 # =============================================================================
-# Лёгкий бандл (≈13 МБ, 4 пакета):
+# Лёгкий бандл (≈25 МБ, пакеты):
 #   - kamailio-6.1.1.pkg   — МИНИМАЛЬНАЯ сборка (без MySQL/XML/icu/libxml2),
 #                            берётся из нашего GitHub Release (собрана CI на
 #                            FreeBSD 14.0). НЕ из quarterly: тамошний kamailio
 #                            тянет icu/libxml2 и ломает стоковый pfSense.
 #   - rtpproxy + gsm       — из quarterly (ставятся на сток без конфликтов).
-#   - pfSense-pkg-SipRegistrar-*.pkg — кладётся отдельно (py build_pkg.py).
+#   - python311 (+deps)    — для опциональной функции B2BUA (внешний перевод
+#                            звонка). Обычный pkg из штатного репозитория —
+#                            НЕ из FreeBSD-репо (тот при установке апгрейдит
+#                            сам pkg и ломает Package Manager, см. README).
+#                            sippy и его зависимости УЖЕ зашиты в сам .pkg
+#                            (bundled wheels, files/.../b2bua/wheels) — здесь
+#                            качать их отдельно не нужно.
+#   - pfSense-pkg-SipRegistar-*.pkg — кладётся отдельно (py build_pkg.py).
 #
 # Запуск на pfSense 2.7.2 (amd64) С интернетом (нужен включённый pfSense-Extra).
 # =============================================================================
@@ -16,7 +23,7 @@ set -e
 HERE=$(cd "$(dirname "$0")" && pwd)
 PKGDIR="${HERE}/packages"
 ABI="FreeBSD:14:amd64"
-KAM_URL="https://github.com/humaxoid/SipRegistrar/releases/download/freebsd-pkgs/kamailio-6.1.1.pkg"
+KAM_URL="https://github.com/humaxoid/SipRegistar/releases/download/freebsd-pkgs/kamailio-6.1.1.pkg"
 
 mkdir -p "${PKGDIR}"
 
@@ -29,10 +36,22 @@ find "${PKGDIR}" -name 'rtpproxy-*.pkg' -o -name 'gsm-*.pkg' | while read -r f; 
     [ -f "${PKGDIR}/$b" ] || cp "$f" "${PKGDIR}/$b"
 done
 rm -rf "${PKGDIR}/All" 2>/dev/null || true
+
+echo "==> python311 (+ рантайм-зависимости) для B2BUA ..."
+env ABI="${ABI}" IGNORE_OSVERSION=yes ASSUME_ALWAYS_YES=yes \
+    pkg fetch -d -y -o "${PKGDIR}" -r pfSense-Extra python311
+find "${PKGDIR}" -name 'python311-*.pkg' -o -name 'mpdecimal-*.pkg' -o \
+     -name 'readline-*.pkg' -o -name 'libffi-*.pkg' -o -name 'gettext-runtime-*.pkg' | \
+while read -r f; do
+    b=$(basename "$f" | sed 's/~[0-9a-f]*\.pkg$/.pkg/')
+    [ -f "${PKGDIR}/$b" ] || cp "$f" "${PKGDIR}/$b"
+done
+rm -rf "${PKGDIR}/All" 2>/dev/null || true
+
 # Убираем всё лишнее, если pkg fetch притащил другие зависимости.
 for f in "${PKGDIR}"/*.pkg; do
     case "$(basename "$f")" in
-        kamailio-*|rtpproxy-*|gsm-*|pfSense-pkg-SipRegistrar-*) : ;;
+        kamailio-*|rtpproxy-*|gsm-*|python311-*|mpdecimal-*|readline-*|libffi-*|gettext-runtime-*|pfSense-pkg-SipRegistar-*) : ;;
         *) rm -f "$f" ;;
     esac
 done
@@ -49,5 +68,5 @@ echo "==> генерирую SHA256SUMS (контроль целостности
 
 echo "==> готово, в packages/:"
 ls -1 "${PKGDIR}"/*.pkg
-echo "    (если pfSense-pkg-SipRegistrar-*.pkg добавили ПОСЛЕ — перегенерируйте SHA256SUMS:"
+echo "    (если pfSense-pkg-SipRegistar-*.pkg добавили ПОСЛЕ — перегенерируйте SHA256SUMS:"
 echo "     cd packages && sha256 -r *.pkg > SHA256SUMS)"
