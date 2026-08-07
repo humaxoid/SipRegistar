@@ -101,9 +101,16 @@ with optional routing to external SIP gateways based on number prefixes.
 - **SIP ID**: any text containing Latin letters, digits, underscores,
   periods, and hyphens (length 1..64). Examples: `alice`, `101`,
   `director`, `gw_ta800`. Used as the SIP registration username on phones.
-- The HA1 password hash is calculated as
-  `md5(SIP ID + Realm + Password)` and stored in pfSense `config.xml`.
-  The plain-text password is never stored.
+- The HA1 hash `md5(SIP ID + Realm + Password)` is what Kamailio actually
+  authenticates against; it is written to the `subscriber` table (file mode
+  `0600`).
+- **The password itself is kept in pfSense `config.xml` in clear text.** It has
+  to be: HA1 depends on the realm, so changing the SIP Realm (for example when
+  the LAN address changes) requires recomputing every hash, which is impossible
+  from the hash alone. The GUI never displays a stored password — it only shows
+  whether one is set — and `config.xml` is readable by pfSense administrators
+  only. Treat a `config.xml` backup as a secret: it carries both the extension
+  passwords and the SIP trunk credentials.
 
 The **Number → SIP ID** mapping is stored in the Kamailio `dbaliases`
 table. When someone dials a Number, Kamailio looks up the alias and
