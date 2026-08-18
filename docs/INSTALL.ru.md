@@ -1,4 +1,4 @@
-# Инструкция по установке — pfSense-pkg-SipRegistar v2.5.1
+# Инструкция по установке — pfSense-pkg-SipRegistar v2.5.2
 
 Руководство по установке SIP Registar (**Kamailio 6.1.1** + **rtpproxy**) на
 pfSense 2.7.2 **офлайн-способом** — без доступа в интернет на самом pfSense и **без
@@ -23,7 +23,7 @@ pfSense 2.7.2 **офлайн-способом** — без доступа в и�
 offline/
 ├── install.sh          # установщик
 └── packages/
-    ├── pfSense-pkg-SipRegistar-2.5.1.pkg   # сам пакет
+    ├── pfSense-pkg-SipRegistar-2.5.2.pkg   # сам пакет
     ├── kamailio-6.1.1.pkg                   # минимальная сборка (без icu/libxml2)
     ├── rtpproxy-2.1.1_1.pkg                 # медиа‑прокси (RTP)
     └── gsm-1.0.23.pkg                       # кодек (зависимость rtpproxy)
@@ -63,7 +63,7 @@ sh install.sh
 
 Признак успеха:
 ```
-[4/4] Installing pfSense-pkg-SipRegistar-2.5.1...
+[4/4] Installing pfSense-pkg-SipRegistar-2.5.2...
 apply ok
   SIP Registrar installed successfully.
 ==> Готово.
@@ -89,7 +89,7 @@ ps ax | grep -E '[k]amailio|[r]tpproxy'          # сервисы запущен
 ```
 
 **В веб‑интерфейсе** (обновите страницу — **Ctrl+F5**, при необходимости перезайдите):
-- **System → Package Manager → Installed Packages** — появляется `SIP Registrar 2.5.1`.
+- **System → Package Manager → Installed Packages** — появляется `SIP Registrar 2.5.2`.
 - **Services → SIP Registrar** — страница настройки.
 - **Дашборд‑виджет:** на главной (Dashboard) нажмите **«+»** (Available Widgets) и
   добавьте **SIP Registrar**. *(Виджеты в pfSense добавляются вручную.)*
