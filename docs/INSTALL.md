@@ -1,4 +1,4 @@
-# Installation Guide — pfSense-pkg-SipRegistar v2.6.0
+# Installation Guide — pfSense-pkg-SipRegistar v2.7.0
 
 This guide covers the **offline installation** of the SIP registrar
 (**Kamailio 6.1.1** + **rtpproxy**) on pfSense 2.7.2 — no Internet access required
@@ -23,7 +23,7 @@ dependencies:
 offline/
 ├── install.sh          # installer
 └── packages/
-    ├── pfSense-pkg-SipRegistar-2.6.0.pkg   # the package
+    ├── pfSense-pkg-SipRegistar-2.7.0.pkg   # the package
     ├── kamailio-6.1.1.pkg                   # minimal build (no icu/libxml2)
     ├── rtpproxy-2.1.1_1.pkg                 # media proxy (RTP)
     └── gsm-1.0.23.pkg                       # codec (rtpproxy dependency)
@@ -64,7 +64,7 @@ The script automatically:
 
 Success looks like:
 ```
-[4/4] Installing pfSense-pkg-SipRegistar-2.6.0...
+[4/4] Installing pfSense-pkg-SipRegistar-2.7.0...
 apply ok
   SIP Registrar installed successfully.
 ```
@@ -89,7 +89,7 @@ ps ax | grep -E '[k]amailio|[r]tpproxy'          # services running
 ```
 
 **In the web UI** (refresh — **Ctrl+F5**, re-login if needed):
-- **System → Package Manager → Installed Packages** — shows `SIP Registrar 2.6.0`.
+- **System → Package Manager → Installed Packages** — shows `SIP Registrar 2.7.0`.
 - **Services → SIP Registrar** — the configuration page.
 - **Dashboard widget:** on the Dashboard click **"+"** (Available Widgets) and add
   **SIP Registrar**. *(Widgets are added manually in pfSense.)*
